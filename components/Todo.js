@@ -1,7 +1,7 @@
 class Todo {
-  constructor(data, selector) {
+  constructor(data, todoTemplate) {
     this._data = data;
-    this._templateElement = document.querySelector(selector);
+    this._templateElement = todoTemplate;
   }
 
   _setEventListeners() {
