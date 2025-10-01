@@ -54,3 +54,6 @@ addTodoForm.addEventListener("submit", (evt) => {
   todosList.append(todo);
   closeModal(addTodoPopup);
 });
+
+const addTodoFormValidator = new FormValidator(validationConfig, addTodoForm);
+addTodoFormValidator.enableValidation();
