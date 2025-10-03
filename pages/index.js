@@ -8,7 +8,8 @@ import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
-const addTodoPopupElement = document.querySelector("#add-todo-popup");
+const addTodoPopupSelector = "#add-todo-popup";
+const addTodoPopupElement = document.querySelector(addTodoPopupSelector);
 const addTodoForm = addTodoPopupElement.querySelector(".popup__form");
 const todoTemplate = document.querySelector("#todo-template");
 const todosListSelector = ".todos__list";
@@ -17,6 +18,17 @@ const generateTodo = (data) => {
   const todo = new Todo(data, todoTemplate);
   const todoElement = todo.getView();
   return todoElement;
+}
+
+const handleFormSubmit = (inputValues) => {
+  const id = uuidv4();
+  const name = inputValues.name;
+  const date = new Date(inputValues.date);
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+  const values = { id, name, date };
+  const todo = generateTodo(values);
+  section.addItem(todo);
+  addTodoPopup.close();
 }
 
 const section = new Section({ 
@@ -31,8 +43,8 @@ const section = new Section({
 section.renderItems();
 
 const addTodoPopup = new PopupWithForm({ 
-  popupSelector: "#add-todo-popup",
-  handleFormSubmit: () => {},
+  popupSelector: addTodoPopupSelector,
+  handleFormSubmit,
  });
 
  addTodoPopup.setEventListeners();
@@ -40,22 +52,6 @@ const addTodoPopup = new PopupWithForm({
 
 addTodoButton.addEventListener("click", () => {
   addTodoPopup.open();
-});
-
-addTodoForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  const id = uuidv4();
-  const name = evt.target.name.value;
-  const dateInput = evt.target.date.value;
-
-// Create a date object and adjust for timezone
-  const date = new Date(dateInput);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-  const values = { id, name, date };
-  const todo = generateTodo(values);
-  section.addItem(todo);
-  addTodoPopup.close();
 });
 
 const addTodoFormValidator = new FormValidator(validationConfig, addTodoForm);
